@@ -1,5 +1,7 @@
 #pragma output REGISTER_SP = 0xD000
 
+#include <malloc.h>
+
 #include <z80.h>
 #include <arch/zx.h>
 #include <arch/zx/sp1.h>
@@ -13,15 +15,8 @@ struct sp1_Rect full_screen = {0, 0, 32, 24};
 #include "gameObject.h"
 #include "inputController.h"
 #include "sceneController.h"
+#include "gameObjectFactory.h"
 #include "renderer.h"
-
-void initialiseColour(unsigned int count, struct sp1_cs *c)
-{
-  (void)count;    /* Suppress compiler warning about unused parameter */
-
-  c->attr_mask = SP1_AMASK_INK;
-  c->attr      = INK_BLUE;
-}
 
 int main()
 {
@@ -32,22 +27,17 @@ int main()
                   ' ' );
   sp1_Invalidate(&full_screen);
  
-  struct sp1_ss *bubble_sprite = sp1_CreateSpr(SP1_DRAW_MASK2LB, SP1_TYPE_2BYTE, 3, 0, 0);
-  sp1_AddColSpr(bubble_sprite, SP1_DRAW_MASK2,    SP1_TYPE_2BYTE, bubble_col2-bubble_col1, 0);
-  sp1_AddColSpr(bubble_sprite, SP1_DRAW_MASK2RB,  SP1_TYPE_2BYTE, 0, 0);
-  sp1_IterateSprChar(bubble_sprite, initialiseColour);  
-  
-  GameObject gameObject;
-  GameObject_initialize(&gameObject, bubble_sprite, 8, 8);  
-  
+  GameObject *interceptor = GameObjectFactory_static_makeGameObject(8, 8);
+  GameObject *enemy = GameObjectFactory_static_makeGameObject(228, 8);
+
   InputController inputController;
   InputController_initialize(&inputController);  
   
   SceneController sceneController;
-  SceneController_initialize(&sceneController, &gameObject, &inputController);
+  SceneController_initialize(&sceneController, interceptor, &inputController);
   
   Renderer renderer;
-  Renderer_initialize(&renderer, &gameObject, &full_screen);
+  Renderer_initialize(&renderer, interceptor, enemy, &full_screen);
   
   while(true)
   {      
