@@ -1,6 +1,9 @@
 #pragma output REGISTER_SP = 0xD000
 
+#include "bool.h"
+
 #include <z80.h>
+#include <input.h>
 #include <arch/zx.h>
 #include <arch/zx/sp1.h>
 
@@ -21,6 +24,7 @@ int main()
 {
   struct sp1_ss  *bubble_sprite;
   unsigned char x;
+  unsigned char y;
 
   zx_border(INK_BLACK);
 
@@ -35,12 +39,26 @@ int main()
 
   sp1_IterateSprChar(bubble_sprite, initialiseColour);  
 
-  x=0;
-  while(1)
+  x = 6;
+  y = 6;
+  
+  while(true)
   {
-    sp1_MoveSprPix(bubble_sprite, &full_screen, bubble_col1, x++, 80);
+      if (in_key_pressed(IN_KEY_SCANCODE_SPACE)) {
+        x++;
+      }
+      
+      if (in_key_pressed(IN_KEY_SCANCODE_w)) {
+          y--;
+      }
+      else if (in_key_pressed(IN_KEY_SCANCODE_s)) {
+          y++;
+      }
+      
+    sp1_MoveSprPix(bubble_sprite, &full_screen, bubble_col1, x, y);
 
-    z80_delay_ms(25);
-    sp1_UpdateNow();    
+    //z80_delay_ms(25);
+    sp1_UpdateNow();
+    
   }
 }
