@@ -25,4 +25,7 @@ void InputController_step(InputController *inputController) {
       else if (in_key_pressed(IN_KEY_SCANCODE_s)) {
           inputController->downButtonPressed = true;
       }
+      if (in_key_pressed(IN_KEY_SCANCODE_SPACE)) {
+          inputController->fireButtonPressed = true;
+      }
 }

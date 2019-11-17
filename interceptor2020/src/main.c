@@ -29,15 +29,21 @@ int main()
  
   GameObject *interceptor = GameObjectFactory_static_makeGameObject(8, 8);
   GameObject *enemy = GameObjectFactory_static_makeGameObject(228, 8);
+  GameObject *enemySecond = GameObjectFactory_static_makeGameObject(228, 128);
+  GameObject *bullet = GameObjectFactory_static_makeGameObject(8, 8);
 
   InputController inputController;
   InputController_initialize(&inputController);  
   
   SceneController sceneController;
-  SceneController_initialize(&sceneController, interceptor, &inputController);
+  SceneController_initialize(&sceneController, interceptor, bullet, &inputController);
   
   Renderer renderer;
-  Renderer_initialize(&renderer, interceptor, enemy, &full_screen);
+  Renderer_initialize(&renderer, &full_screen);
+  Renderer_addObject(&renderer, interceptor);
+  Renderer_addObject(&renderer, enemy);
+  Renderer_addObject(&renderer, enemySecond);
+  Renderer_addObject(&renderer, bullet);
   
   while(true)
   {      

@@ -1,20 +1,29 @@
+#define RENDERER_MAX_OBJECTS 10
+
 struct RendererStruct {
-  GameObject *firstObject;
-  GameObject *secondObject;
+    unsigned char objectsCount;    
+    GameObject *objects[RENDERER_MAX_OBJECTS];
   struct sp1_Rect *full_screen;
 };
 typedef struct RendererStruct Renderer;
 
-void Renderer_initialize(Renderer *renderer, GameObject *firstObject, GameObject *secondObject, struct sp1_Rect *full_screen) {
+void Renderer_initialize(Renderer *renderer, struct sp1_Rect *full_screen) {
+    renderer->objectsCount = 0;
     renderer->full_screen = full_screen;
-    renderer->firstObject = firstObject;
-    renderer->secondObject = secondObject;
+}
+
+void Renderer_addObject(Renderer *renderer, GameObject *gameObject) {
+    if (renderer->objectsCount >= RENDERER_MAX_OBJECTS) {
+        return;
+    }
+    renderer->objects[renderer->objectsCount] = gameObject;
+    renderer->objectsCount++;
 }
 
 void Renderer_render(Renderer *renderer) {
     struct sp1_Rect *full_screen = renderer->full_screen;
-    GameObject *firstObject = renderer->firstObject;
-    GameObject *secondObject = renderer->secondObject;
-    sp1_MoveSprPix(firstObject->gameObjectSprite, full_screen, bubble_col1, firstObject->x, firstObject->y);
-    sp1_MoveSprPix(secondObject->gameObjectSprite, full_screen, bubble_col1, secondObject->x, secondObject->y);    
+    for (unsigned char i = 0; i < renderer->objectsCount; i++) {
+        GameObject *gameObject = renderer->objects[i];
+        sp1_MoveSprPix(gameObject->gameObjectSprite, full_screen, bubble_col1, gameObject->x, gameObject->y);
+    }
 }
