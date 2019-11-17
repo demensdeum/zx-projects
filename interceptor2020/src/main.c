@@ -23,6 +23,7 @@ void initialiseColour(unsigned int count, struct sp1_cs *c)
 int main()
 {
   struct sp1_ss  *bubble_sprite;
+  struct sp1_ss  *bubble_sprite_second;
   unsigned char x;
   unsigned char y;
 
@@ -36,6 +37,10 @@ int main()
   bubble_sprite = sp1_CreateSpr(SP1_DRAW_MASK2LB, SP1_TYPE_2BYTE, 3, 0, 0);
   sp1_AddColSpr(bubble_sprite, SP1_DRAW_MASK2,    SP1_TYPE_2BYTE, bubble_col2-bubble_col1, 0);
   sp1_AddColSpr(bubble_sprite, SP1_DRAW_MASK2RB,  SP1_TYPE_2BYTE, 0, 0);
+  
+  bubble_sprite_second = sp1_CreateSpr(SP1_DRAW_MASK2LB, SP1_TYPE_2BYTE, 3, 0, 0);
+  sp1_AddColSpr(bubble_sprite_second, SP1_DRAW_MASK2,    SP1_TYPE_2BYTE, bubble_col2-bubble_col1, 0);
+  sp1_AddColSpr(bubble_sprite_second, SP1_DRAW_MASK2RB,  SP1_TYPE_2BYTE, 0, 0);  
 
   sp1_IterateSprChar(bubble_sprite, initialiseColour);  
 
@@ -56,6 +61,7 @@ int main()
       }
       
     sp1_MoveSprPix(bubble_sprite, &full_screen, bubble_col1, x, y);
+    sp1_MoveSprPix(bubble_sprite_second, &full_screen, bubble_col1, x+10, y);
 
     //z80_delay_ms(25);
     sp1_UpdateNow();
