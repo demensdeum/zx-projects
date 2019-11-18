@@ -1,4 +1,4 @@
-#define RENDERER_MAX_OBJECTS 10
+#define RENDERER_MAX_OBJECTS 32
 
 struct RendererStruct {
     unsigned char objectsCount;    

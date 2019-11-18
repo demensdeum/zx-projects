@@ -12,11 +12,13 @@ extern unsigned char bubble_col1[];
 extern unsigned char bubble_col2[];
 struct sp1_Rect full_screen = {0, 0, 32, 24};
 
+#include "sprite.h"
 #include "gameObject.h"
 #include "inputController.h"
 #include "sceneController.h"
 #include "gameObjectFactory.h"
 #include "renderer.h"
+#include "scrollingTilesController.h"
 
 int main()
 {
@@ -28,8 +30,6 @@ int main()
   sp1_Invalidate(&full_screen);
  
   GameObject *interceptor = GameObjectFactory_static_makeGameObject(8, 8);
-  GameObject *enemy = GameObjectFactory_static_makeGameObject(228, 8);
-  GameObject *enemySecond = GameObjectFactory_static_makeGameObject(228, 128);
   GameObject *bullet = GameObjectFactory_static_makeGameObject(8, 8);
 
   InputController inputController;
@@ -41,17 +41,19 @@ int main()
   Renderer renderer;
   Renderer_initialize(&renderer, &full_screen);
   Renderer_addObject(&renderer, interceptor);
-  Renderer_addObject(&renderer, enemy);
-  Renderer_addObject(&renderer, enemySecond);
   Renderer_addObject(&renderer, bullet);
+  
+  ScrollingTilesController scrollingTilesController;
+  ScrollingTilesController_initialize(&scrollingTilesController, &renderer);
   
   while(true)
   {      
     InputController_step(&inputController);
     SceneController_step(&sceneController);
+    ScrollingTilesController_step(&scrollingTilesController);
+    
     Renderer_render(&renderer);
-      
-    //z80_delay_ms(1);
+
     sp1_UpdateNow();
     
   }

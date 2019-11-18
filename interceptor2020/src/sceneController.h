@@ -18,16 +18,16 @@ void SceneController_step(SceneController *sceneController) {
     GameObject *playerControlledGameObject = sceneController->playerControlledGameObject;
     InputController *inputController = sceneController->inputController;
     if (inputController->upButtonPressed) {
-        playerControlledGameObject->y--;
+        playerControlledGameObject->y -= 8;
     }
     else if (inputController->downButtonPressed) {
-        playerControlledGameObject->y++;
+        playerControlledGameObject->y += 8;
     }
     if (inputController->fireButtonPressed) {
         sceneController->bulletShouldFly = true;
     }
     if (sceneController->bulletShouldFly && bulletGameObject->x < 228) {
-        bulletGameObject->x += 6;
+        bulletGameObject->x += 12;
     }
     else {
         sceneController->bulletShouldFly = false;
