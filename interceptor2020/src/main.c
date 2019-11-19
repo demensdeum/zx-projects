@@ -19,6 +19,7 @@ struct sp1_Rect full_screen = {0, 0, 32, 24};
 #include "gameObjectFactory.h"
 #include "renderer.h"
 #include "scrollingTilesController.h"
+#include "enemiesController.h"
 
 int main()
 {
@@ -46,11 +47,15 @@ int main()
   ScrollingTilesController scrollingTilesController;
   ScrollingTilesController_initialize(&scrollingTilesController, &renderer);
   
+  EnemiesController enemiesController;
+  EnemiesController_initialize(&enemiesController, &renderer);
+  
   while(true)
   {      
     InputController_step(&inputController);
     SceneController_step(&sceneController);
     ScrollingTilesController_step(&scrollingTilesController);
+    EnemiesController_step(&enemiesController);
     
     Renderer_render(&renderer);
 
