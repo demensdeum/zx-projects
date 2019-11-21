@@ -5,9 +5,12 @@
 #include <z80.h>
 #include <arch/zx.h>
 #include <arch/zx/sp1.h>
+#include <sound.h>
 
 #include "new.h"
 #include "bool.h"
+#include "beep.h"
+#include "nullptr.h"
 
 #include "resources.h"
 
@@ -19,7 +22,6 @@
 #include "renderer.h"
 #include "scrollingTilesController.h"
 #include "enemiesController.h"
-#include "stateControllerIdentifier.h"
 #include "stateController.h"
 #include "stateMachine.h"
 #include "inGameController.h"
@@ -33,13 +35,17 @@ int main()
                   ' ' );
   sp1_Invalidate(&full_screen);
  
-  InGameController *inGameController = new(InGameController);
-  InGameController_initialize(inGameController);
+    InGameController *inGameController = new(InGameController);
+    InGameController_initialize(inGameController);
   
-  while(inGameController->nextStateControllerIdentifier == none)
-  {
-        InGameController_step(inGameController);
-  }
+    StateMachine *stateMachine = new(StateMachine);
+    StateMachine_initialize(stateMachine);
+    StateMachine_startWithController(stateMachine, inGameController->stateController);
+    
+    while (stateMachine->isRunning) {
+        StateMachine_step(stateMachine);
+        //InGameController_step(inGameController);
+    }
   
   return 0;
 }

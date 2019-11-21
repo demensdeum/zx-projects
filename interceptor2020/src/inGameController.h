@@ -6,9 +6,14 @@
      Renderer *renderer;
      ScrollingTilesController *scrollingTilesController;
      EnemiesController *enemiesController;
-     StateControllerIdentifier nextStateControllerIdentifier;
+     StateController *stateController;
 };
 typedef struct InGameControllerStruct InGameController;
+
+void InGameController_step(InGameController *inGameController);
+void InGameController_stepUncasted(void *stateControllerSubclass);
+
+static InGameController *inGameController;
 
 void InGameController_initialize(InGameController *inGameController) {
   GameObject *interceptor = GameObjectFactory_static_makeGameObject(8, 8);
@@ -38,7 +43,10 @@ void InGameController_initialize(InGameController *inGameController) {
   EnemiesController_initialize(enemiesController, renderer);
   inGameController->enemiesController = enemiesController;
   
-  inGameController->nextStateControllerIdentifier = none;
+  StateController *stateController = new(StateController);
+  stateController->subclassInstance = inGameController;
+  stateController->subclassStepFunction = &InGameController_stepUncasted;
+  inGameController->stateController = stateController;
 }
 
 void InGameController_deinitialize(InGameController *inGameController) {
@@ -49,6 +57,11 @@ void InGameController_deinitialize(InGameController *inGameController) {
      free(inGameController->renderer);
      free(inGameController->scrollingTilesController);
      free(inGameController->enemiesController);
+}
+
+void InGameController_stepUncasted(void *stateControllerSubclass) {
+    InGameController *inGameController = (InGameController *)stateControllerSubclass;
+    InGameController_step(inGameController);
 }
 
 void InGameController_step(InGameController *inGameController) {
