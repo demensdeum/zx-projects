@@ -1,18 +1,28 @@
 #pragma output REGISTER_SP = 0xD000
 
+// C includes
+
 #include <malloc.h>
+
+// Spectrum specific
 
 #include <z80.h>
 #include <arch/zx.h>
 #include <arch/zx/sp1.h>
 #include <sound.h>
 
+// C syntax extensions
+
 #include "new.h"
 #include "bool.h"
 #include "beep.h"
 #include "nullptr.h"
 
+// Resources
+
 #include "resources.h"
+
+// Game includes
 
 #include "sprite.h"
 #include "gameObject.h"
@@ -24,6 +34,8 @@
 #include "enemiesController.h"
 #include "stateController.h"
 #include "stateMachine.h"
+//#include "titleScreenStateController.h"
+#include "tessaScreenStateController.h"
 #include "inGameController.h"
 
 int main()
@@ -34,13 +46,17 @@ int main()
                   INK_BLACK | PAPER_WHITE,
                   ' ' );
   sp1_Invalidate(&full_screen);
- 
+  
     InGameController *inGameController = new(InGameController);
     InGameController_initialize(inGameController);
   
+    TitleScreenStateController *titleScreenStateController = new(TitleScreenStateController);
+    TitleScreenStateController_initiailize(titleScreenStateController);
+    
     StateMachine *stateMachine = new(StateMachine);
     StateMachine_initialize(stateMachine);
-    StateMachine_startWithController(stateMachine, inGameController->stateController);
+    StateMachine_startWithController(stateMachine, titleScreenStateController->stateController);
+    //StateMachine_startWithController(stateMachine, inGameController->stateController);
     
     while (stateMachine->isRunning) {
         StateMachine_step(stateMachine);
