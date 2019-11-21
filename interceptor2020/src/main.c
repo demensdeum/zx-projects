@@ -6,6 +6,7 @@
 #include <arch/zx.h>
 #include <arch/zx/sp1.h>
 
+#include "new.h"
 #include "bool.h"
 
 extern unsigned char bubble_col1[];
@@ -20,6 +21,7 @@ struct sp1_Rect full_screen = {0, 0, 32, 24};
 #include "renderer.h"
 #include "scrollingTilesController.h"
 #include "enemiesController.h"
+#include "stateControllerIdentifier.h"
 #include "inGameController.h"
 
 int main()
@@ -31,7 +33,13 @@ int main()
                   ' ' );
   sp1_Invalidate(&full_screen);
  
-  InGameController_initialize();
+  InGameController *inGameController = new(InGameController);
+  InGameController_initialize(inGameController);
+  
+  while(inGameController->nextStateControllerIdentifier == none)
+  {
+        InGameController_step(inGameController);
+  }
   
   return 0;
 }
