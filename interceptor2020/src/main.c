@@ -44,7 +44,6 @@ int main()
     
     while (stateMachine->isRunning) {
         StateMachine_step(stateMachine);
-        //InGameController_step(inGameController);
     }
   
   return 0;
