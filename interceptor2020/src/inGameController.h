@@ -7,6 +7,8 @@
      ScrollingTilesController *scrollingTilesController;
      EnemiesController *enemiesController;
      StateController *stateController;
+     StateController *gameOverStateController;
+     unsigned char steps;
 };
 typedef struct InGameControllerStruct InGameController;
 
@@ -46,7 +48,10 @@ void InGameController_initialize(InGameController *inGameController) {
   StateController *stateController = new(StateController);
   stateController->subclassInstance = inGameController;
   stateController->subclassStepFunction = &InGameController_stepUncasted;
+  stateController->nextStateController = nullptr;
   inGameController->stateController = stateController;
+  
+  inGameController->steps = 0;
 }
 
 void InGameController_deinitialize(InGameController *inGameController) {
@@ -57,6 +62,16 @@ void InGameController_deinitialize(InGameController *inGameController) {
      free(inGameController->renderer);
      free(inGameController->scrollingTilesController);
      free(inGameController->enemiesController);
+}
+
+void InGameController_reset(InGameController *inGameController) {
+    inGameController->stateController->nextStateController = nullptr;
+    inGameController->steps = 0;    
+}
+
+void InGameController_showGameOver(InGameController *inGameController) {
+    StateController *gameOverStateController = inGameController->gameOverStateController;
+    inGameController->stateController->nextStateController = gameOverStateController;    
 }
 
 void InGameController_stepUncasted(void *stateControllerSubclass) {
@@ -73,4 +88,13 @@ void InGameController_step(InGameController *inGameController) {
     Renderer_render(inGameController->renderer);
 
     sp1_UpdateNow();
+    
+    if (inGameController->steps < 10) {
+        inGameController->steps++;
+        inGameController->stateController->nextStateController = nullptr;
+    }
+    else {
+        InGameController_reset(inGameController);
+        InGameController_showGameOver(inGameController);
+    }
 }

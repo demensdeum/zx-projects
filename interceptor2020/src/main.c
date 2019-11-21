@@ -34,9 +34,9 @@
 #include "enemiesController.h"
 #include "stateController.h"
 #include "stateMachine.h"
-//#include "titleScreenStateController.h"
-#include "tessaScreenStateController.h"
+#include "titleScreenStateController.h"
 #include "inGameController.h"
+#include "gameOverStateController.h"
 
 int main()
 {
@@ -51,12 +51,15 @@ int main()
     InGameController_initialize(inGameController);
   
     TitleScreenStateController *titleScreenStateController = new(TitleScreenStateController);
-    TitleScreenStateController_initiailize(titleScreenStateController);
+    TitleScreenStateController_initiailize(titleScreenStateController, inGameController->stateController);
+    
+    GameOverStateController *gameOverStateController = new(GameOverStateController);
+    GameOverStateController_initiailize(gameOverStateController, inGameController->stateController);
+    inGameController->gameOverStateController = gameOverStateController->stateController;
     
     StateMachine *stateMachine = new(StateMachine);
     StateMachine_initialize(stateMachine);
     StateMachine_startWithController(stateMachine, titleScreenStateController->stateController);
-    //StateMachine_startWithController(stateMachine, inGameController->stateController);
     
     while (stateMachine->isRunning) {
         StateMachine_step(stateMachine);
