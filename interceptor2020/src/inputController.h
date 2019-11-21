@@ -1,9 +1,9 @@
 #include <input.h>
 
 struct InputControllerStruct {
-    unsigned char upButtonPressed;
-    unsigned char downButtonPressed;
-    unsigned char fireButtonPressed;
+    bool upButtonPressed;
+    bool downButtonPressed;
+    bool fireButtonPressed;
 };
 typedef struct InputControllerStruct InputController;
 

@@ -2,7 +2,7 @@ struct SceneControllerStruct {
   GameObject *playerControlledGameObject;
   GameObject *bulletGameObject;
   InputController *inputController;
-  unsigned char bulletShouldFly;
+  bool bulletShouldFly;
 };
 typedef struct SceneControllerStruct SceneController;
 

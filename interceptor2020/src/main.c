@@ -9,9 +9,7 @@
 #include "new.h"
 #include "bool.h"
 
-extern unsigned char bubble_col1[];
-extern unsigned char bubble_col2[];
-struct sp1_Rect full_screen = {0, 0, 32, 24};
+#include "resources.h"
 
 #include "sprite.h"
 #include "gameObject.h"
@@ -22,6 +20,8 @@ struct sp1_Rect full_screen = {0, 0, 32, 24};
 #include "scrollingTilesController.h"
 #include "enemiesController.h"
 #include "stateControllerIdentifier.h"
+#include "stateController.h"
+#include "stateMachine.h"
 #include "inGameController.h"
 
 int main()

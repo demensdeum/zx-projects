@@ -1,7 +1,7 @@
  struct EnemiesControllerStruct {
      GameObject *enemy;
      GameObject *bullet;
-     unsigned char shouldMoveUp;
+     bool shouldMoveUp;
      unsigned char moveStep;
 };
 typedef struct EnemiesControllerStruct EnemiesController;
