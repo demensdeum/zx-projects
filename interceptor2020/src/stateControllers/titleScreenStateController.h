@@ -31,7 +31,7 @@ void TitleScreenStateController_step(TitleScreenStateController *titleScreenStat
     
      struct sp1_pss ps0;
      
-   ps0.bounds    = &full_screen;
+   ps0.bounds    = &Renderer_fullScreenRect;
    ps0.flags     = SP1_PSSFLAG_INVALIDATE;
    ps0.visit     = 0;
      
@@ -56,5 +56,5 @@ void TitleScreenStateController_step(TitleScreenStateController *titleScreenStat
     
     in_wait_key();
     
-   	sp1_ClearRectInv(&full_screen, BRIGHT | INK_BLACK | PAPER_BLACK, 32, SP1_RFLAG_TILE | SP1_RFLAG_COLOUR);        
+   	Renderer_clearScreen();       
 }

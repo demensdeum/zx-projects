@@ -32,7 +32,7 @@ void GameOverStateController_step(GameOverStateController *gameOverStateControll
     
      struct sp1_pss ps0;
      
-   ps0.bounds    = &full_screen;
+   ps0.bounds    = &Renderer_fullScreenRect;
    ps0.flags     = SP1_PSSFLAG_INVALIDATE;
    ps0.attr_mask = 0;
    ps0.visit     = 0;

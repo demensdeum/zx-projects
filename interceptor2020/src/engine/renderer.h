@@ -3,13 +3,23 @@
 struct RendererStruct {
     unsigned char objectsCount;    
     GameObject *objects[RENDERER_MAX_OBJECTS];
-  struct sp1_Rect *full_screen;
+  struct sp1_Rect full_screen;
 };
 typedef struct RendererStruct Renderer;
 
-void Renderer_initialize(Renderer *renderer, struct sp1_Rect *full_screen) {
+struct sp1_Rect Renderer_fullScreenRect = {0, 0, 32, 24};
+
+void Renderer_initialize(Renderer *renderer) {
+    
     renderer->objectsCount = 0;
-    renderer->full_screen = full_screen;
+    
+  zx_border(INK_BLACK);
+  sp1_Initialize( SP1_IFLAG_MAKE_ROTTBL | SP1_IFLAG_OVERWRITE_TILES | SP1_IFLAG_OVERWRITE_DFILE,
+                  INK_BLUE | PAPER_WHITE,
+                  ' ' );
+  sp1_Invalidate(&Renderer_fullScreenRect);
+    
+    
 }
 
 void Renderer_addObject(Renderer *renderer, GameObject *gameObject) {
@@ -29,5 +39,5 @@ void Renderer_render(Renderer *renderer) {
 }
 
 void Renderer_clearScreen() {
-    sp1_ClearRectInv(&full_screen, BRIGHT | INK_BLACK | PAPER_BLACK, 32, SP1_RFLAG_TILE | SP1_RFLAG_COLOUR);      
+    sp1_ClearRectInv(Renderer_fullScreenRect, BRIGHT | INK_BLACK | PAPER_BLACK, 32, SP1_RFLAG_TILE | SP1_RFLAG_COLOUR);      
 }
