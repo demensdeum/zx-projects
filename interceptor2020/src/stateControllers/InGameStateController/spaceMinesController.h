@@ -33,7 +33,7 @@ void SpaceMinesController_putMineOneIfNeeded(SpaceMinesController *spaceMinesCon
     GameObject *spaceMineOne = spaceMinesController->spaceMineOne;
     if (GameObject_isHidden(spaceMineOne)) {
         spaceMineOne->x = 254;
-        spaceMineOne->y = rand() / 180;
+        spaceMineOne->y = randomUnsignedCharMaximal(160);
     }
 }
 
@@ -41,7 +41,7 @@ void SpaceMinesController_putMineTwoIfNeeded(SpaceMinesController *spaceMinesCon
     GameObject *spaceMineTwo = spaceMinesController->spaceMineTwo;
     if (GameObject_isHidden(spaceMineTwo)) {
         spaceMineTwo->x = 254;
-        spaceMineTwo->y = rand() / 180;
+        spaceMineTwo->y = randomUnsignedCharMaximal(160);
     }    
 }
 
