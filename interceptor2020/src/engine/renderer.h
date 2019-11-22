@@ -18,12 +18,37 @@ void Renderer_initialize(Renderer *renderer) {
   sp1_Invalidate(&Renderer_fullScreenRect);
 }
 
-void Renderer_addObject(Renderer *renderer, GameObject *gameObject) {
+void Renderer_removeGameObject(Renderer *renderer, GameObject *gameObjectToRemove) {
+    for (unsigned char i = 0; i < renderer->gameObjectsCount; i++) {
+        GameObject *gameObject = renderer->gameObjects[i];
+        if (gameObject == gameObjectToRemove) {
+            GameObject_release(gameObject);
+            renderer->gameObjectsCount--;
+        }
+    }    
+}
+
+void Renderer_removeAllGameObjects(Renderer *renderer) {
+    for (unsigned char i = 0; i < renderer->gameObjectsCount; i++) {
+        GameObject *gameObject = renderer->gameObjects[i];
+        GameObject_release(gameObject);
+    }    
+    renderer->gameObjectsCount = 0;
+}
+
+void Renderer_deinitialize(Renderer *renderer) {
+
+    Renderer_removeAllGameObjects(renderer);
+}
+
+void Renderer_addGameObject(Renderer *renderer, GameObject *gameObject) {
     if (renderer->gameObjectsCount >= RENDERER_MAX_GAME_OBJECTS) {
         return;
     }
     renderer->gameObjects[renderer->gameObjectsCount] = gameObject;
     renderer->gameObjectsCount++;
+    
+    GameObject_retain(gameObject);
 }
 
 void Renderer_renderGameObjects(Renderer *renderer) {

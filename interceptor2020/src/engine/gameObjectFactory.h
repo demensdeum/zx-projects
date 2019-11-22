@@ -12,7 +12,7 @@ GameObject *GameObjectFactory_static_makeGameObject(unsigned char x, unsigned ch
   sp1_AddColSpr(bubble_sprite, SP1_DRAW_MASK2RB,  SP1_TYPE_2BYTE, 0, 0);
   sp1_IterateSprChar(bubble_sprite, initialiseColour);
     
-    GameObject* gameObject = new(GameObject);
+    GameObject *gameObject = new(GameObject);
     GameObject_initialize(gameObject, bubble_sprite, x, y);
     
     return gameObject;

@@ -1,8 +1,11 @@
+#include "interceptorController.h"
+
 struct InGameStateControllerStruct {
     bool isStarted;
     Renderer *renderer;
     StateController *stateController;
     StateController *gameOverStateController;
+    InterceptorController *interceptorController;
 };
 typedef struct InGameStateControllerStruct InGameStateController;
 
@@ -21,13 +24,21 @@ void InGameStateController_initialize(InGameStateController *inGameStateControll
 }
 
 void InGameStateController_initializeControllers(InGameStateController *inGameStateController) {
-    beep();
-    inGameStateController->isStarted = true;    
+    inGameStateController->isStarted = true;
+
+    Renderer *renderer = inGameStateController->renderer;    
+    Renderer_clearScreen(renderer);    
+    
+    InterceptorController *interceptorController = new(InterceptorController);
+    InterceptorController_initialize(interceptorController, renderer);
+    inGameStateController->interceptorController = interceptorController;
 }
 
 void InGameStateController_deinitializeControllers(InGameStateController *inGameStateController) {
-    beep();
     inGameStateController->isStarted = false;
+    
+    InterceptorController_deinitialize(inGameStateController->interceptorController);
+    delete(inGameStateController->interceptorController);
 }
 
 void InGameStateController_initializeControllersIfNeeded(InGameStateController *inGameStateController) {
@@ -36,20 +47,22 @@ void InGameStateController_initializeControllersIfNeeded(InGameStateController *
     }    
 }
 
+void InGameStateController_showGameOver(InGameStateController *inGameStateController) {
+    inGameStateController->stateController->nextStateController = inGameStateController->gameOverStateController;
+    InGameStateController_deinitializeControllers(inGameStateController);    
+}
+
 void InGameStateController_stepUncasted(void *stateControllerSubclass) {
     InGameStateController *inGameStateController = (InGameStateController *)stateControllerSubclass;
     InGameStateController_step(inGameStateController);
 }
 
 void InGameStateController_step(InGameStateController *inGameStateController) {
-    
     InGameStateController_initializeControllersIfNeeded(inGameStateController);
     
+    InterceptorController_step(inGameStateController->interceptorController);
+    
     Renderer *renderer = inGameStateController->renderer;
-    Renderer_clearScreen(renderer);
-    
-    Renderer_updateScreen(renderer);
-    
-    inGameStateController->stateController->nextStateController = inGameStateController->gameOverStateController;
-    InGameStateController_deinitializeControllers(inGameStateController);
+    Renderer_renderGameObjects(renderer);
+    Renderer_updateScreen(renderer);    
 }
