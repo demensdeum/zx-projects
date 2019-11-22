@@ -31,9 +31,11 @@ void GameOverStateController_step(GameOverStateController *gameOverStateControll
     
     Renderer *renderer = gameOverStateController->renderer;
     Renderer_renderFullscreenImage(renderer, gameOverImage);
+    Renderer_renderText(renderer, "\x14\x47Press Any Key", 10, 16);    
     Renderer_updateScreen(renderer);
     
 #if INTERCEPTOR2020_STRESS_TEST == 0
+    in_wait_nokey();
     in_wait_key();
 #endif
     
