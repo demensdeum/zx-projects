@@ -2,6 +2,7 @@
 #include "gameObject.h"
 #include "inputController.h"
 #include "gameObjectFactory.h"
+#include "fullscreenImage.h"
 #include "renderer.h"
 #include "stateController.h"
 #include "stateMachine.h"

@@ -22,41 +22,24 @@ void TitleScreenStateController_stepUncasted(void *stateControllerSubclass) {
 }
 
 void TitleScreenStateController_step(TitleScreenStateController *titleScreenStateController) {
+    FullscreenImage *titleImage = new(FullscreenImage);
+    FullscreenImage_initialize(titleImage, 
+                               INTERCEPTOR_LOGO_TILES_BASE, 
+                               INTERCEPTOR_LOGO_TILES_LEN, 
+                               interceptorLogo_tiles, 
+                               interceptorLogo_ptiles);
+    
     Renderer *renderer = titleScreenStateController->renderer;
+    Renderer_renderFullscreenImage(renderer, titleImage);
+    Renderer_renderText(renderer, "\x14\x46Space Bounty Hunter", 7, 9);
+    Renderer_renderText(renderer, "\x14\x47Press Any Key", 10, 13);
+    Renderer_renderText(renderer, "\x14\x47 Created by Demens Deum", 4, 19);
+    Renderer_renderText(renderer, "\x14\x47 demensdeum@gmail.com", 5, 20);
+    Renderer_renderText(renderer, "\x14\x03 Yandex Retro Games Battle 2019", 0, 22);
     
-    unsigned char i;
-    unsigned char *pt = interceptorLogo_tiles;
-
-    for (i = 0; i < INTERCEPTOR_LOGO_TILES_LEN; i++, pt += 8) {
-        sp1_TileEntry(INTERCEPTOR_LOGO_TILES_BASE + i, pt);    
-    }
-    
-     struct sp1_pss ps0;
-     
-   ps0.bounds    = &Renderer_fullScreenRect;
-   ps0.flags     = SP1_PSSFLAG_INVALIDATE;
-   ps0.visit     = 0;
-     
-   	Renderer_clearScreen(renderer);   
-   
-     sp1_SetPrintPos(&ps0, 0, 0);
-     sp1_PrintString(&ps0, interceptorLogo_ptiles);
-     
-     sp1_SetPrintPos(&ps0, 13, 10);
-     sp1_PrintString(&ps0, "\x14\x47Press Any Key");
-
-     sp1_SetPrintPos(&ps0, 19, 4);
-     sp1_PrintString(&ps0, "\x14\x47 Created by Demens Deum");
-
-     sp1_SetPrintPos(&ps0, 20, 5);
-     sp1_PrintString(&ps0, "\x14\x47 demensdeum@gmail.com");     
-     
-     sp1_SetPrintPos(&ps0, 22, 0);
-     sp1_PrintString(&ps0, "\x14\x03 Yandex Retro Games Battle 2019");
-     
-    sp1_UpdateNow();
-    
+    Renderer_updateScreen(renderer);
     in_wait_key();
-    
    	Renderer_clearScreen(renderer);
+    
+    delete(titleImage);
 }
