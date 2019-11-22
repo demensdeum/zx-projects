@@ -30,6 +30,12 @@ void InGameStateController_deinitializeControllers(InGameStateController *inGame
     inGameStateController->isStarted = false;
 }
 
+void InGameStateController_initializeControllersIfNeeded(InGameStateController *inGameStateController) {
+    if (inGameStateController->isStarted == false) {
+        InGameStateController_initializeControllers(inGameStateController);
+    }    
+}
+
 void InGameStateController_stepUncasted(void *stateControllerSubclass) {
     InGameStateController *inGameStateController = (InGameStateController *)stateControllerSubclass;
     InGameStateController_step(inGameStateController);
@@ -37,9 +43,7 @@ void InGameStateController_stepUncasted(void *stateControllerSubclass) {
 
 void InGameStateController_step(InGameStateController *inGameStateController) {
     
-    if (inGameStateController->isStarted == false) {
-        InGameStateController_initializeControllers(inGameStateController);
-    }
+    InGameStateController_initializeControllersIfNeeded(inGameStateController);
     
     Renderer *renderer = inGameStateController->renderer;
     Renderer_clearScreen(renderer);
