@@ -1,8 +1,9 @@
  struct InterceptorControllerStruct {
      GameObject *interceptor;
-     GameObject *bullet;
+     GameObject *bullet;    
      InputController *inputController;
      Renderer *renderer;
+     bool isBulletShouldFly;     
 };
 typedef struct InterceptorControllerStruct InterceptorController; 
 
@@ -13,12 +14,14 @@ void InterceptorController_initialize(InterceptorController *interceptorControll
     interceptorController->interceptor = interceptor;
     interceptorController->bullet = bullet;
     interceptorController->renderer = renderer;
+    interceptorController->isBulletShouldFly = false;
     
     GameObject_retain(interceptor);
     GameObject_retain(bullet);
     
     Renderer_addGameObject(renderer, interceptorController->interceptor);
     Renderer_addGameObject(renderer, interceptorController->bullet);
+    GameObject_hide(bullet);
     
     InputController *inputController = new(InputController);
     InputController_initialize(inputController);
@@ -41,11 +44,29 @@ void InterceptorController_step(InterceptorController *interceptorController) {
     InputController_step(inputController);
     
     GameObject *interceptor = interceptorController->interceptor;
+    GameObject *bullet = interceptorController->bullet;
     
-    if (inputController->isDownButtonPressed == true) {
-        interceptor->y += 10;
+    if (inputController->isDownButtonPressed == true && interceptor->y < 160) {
+        interceptor->y += 4;
     }
-    else if (inputController->isUpButtonPressed == true) {
-        interceptor->y -= 10;
+    else if (inputController->isUpButtonPressed == true && interceptor->y > 0) {
+        interceptor->y -= 4;
+    }
+    interceptorController->isBulletShouldFly = (inputController->isFireButtonPressed == true || bullet->x > 0);
+    
+    if (interceptorController->isBulletShouldFly == true) {
+        if (bullet->x == 0) {
+            GameObject_show(bullet);
+            playBulletFireSound();
+            bullet->x = 8;
+            bullet->y = interceptor->y;
+        }
+        else if (bullet->x > 240) {
+            GameObject_hide(bullet);
+            bullet->x = 0;
+        }
+        else {
+            bullet->x += 8;
+        }
     }
 }

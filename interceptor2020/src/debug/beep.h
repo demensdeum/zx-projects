@@ -1,1 +1,1 @@
-#define beep() bit_synth (100,200,200,40,40);
+#define beep() bit_beep (10,256);
