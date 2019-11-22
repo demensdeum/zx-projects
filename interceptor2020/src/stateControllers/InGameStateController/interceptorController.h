@@ -2,7 +2,6 @@
      GameObject *interceptor;
      GameObject *bullet;    
      InputController *inputController;
-     Renderer *renderer;
      bool isBulletShouldFly;     
 };
 typedef struct InterceptorControllerStruct InterceptorController; 
@@ -13,14 +12,13 @@ void InterceptorController_initialize(InterceptorController *interceptorControll
     interceptorController->interceptor = interceptor;
     interceptorController->bullet = bullet;
     
-    interceptorController->renderer = renderer;
     interceptorController->isBulletShouldFly = false;
     
     GameObject_retain(interceptor);
     GameObject_retain(bullet);
     
     Renderer_addGameObject(renderer, interceptor);
-    Renderer_addGameObject(renderer, interceptorController->bullet);
+    Renderer_addGameObject(renderer, bullet);
     GameObject_hide(bullet);
     
     InputController *inputController = new(InputController);
@@ -28,9 +26,7 @@ void InterceptorController_initialize(InterceptorController *interceptorControll
     interceptorController->inputController = inputController;
 }
 
-void InterceptorController_deinitialize(InterceptorController *interceptorController) {
-    Renderer *renderer = interceptorController->renderer;
-    
+void InterceptorController_deinitialize(InterceptorController *interceptorController, Renderer *renderer) {
     GameObject_release(interceptorController->interceptor);
     GameObject_release(interceptorController->bullet);
     

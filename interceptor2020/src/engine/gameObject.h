@@ -39,3 +39,7 @@ void GameObject_show(GameObject *gameObject) {
     gameObject->x = gameObject->beforeHideX;
     gameObject->y = gameObject->beforeHideY;
 }
+
+bool GameObject_isHidden(GameObject *gameObject) {
+    return gameObject->y == 200;
+}

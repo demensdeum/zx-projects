@@ -4,14 +4,18 @@
 #include <arch/zx.h>
 #include <arch/zx/sp1.h>
 #include <sound.h>
+#include <stdlib.h>
 
 #include <malloc.h>
+
+#define INTERCEPTOR2020_STRESS_TEST
 
 #include "debug/beep.h"
 #include "resources/resources.h"
 #include "syntaxExtensions/syntaxExtensions.h"
 #include "engine/engine.h"
 #include "stateControllers/stateControllers.h"
+
 
 int main()
 {

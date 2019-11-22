@@ -1,6 +1,6 @@
 void initialiseColour(unsigned int count, struct sp1_cs *c)
 {
-  (void)count;    /* Suppress compiler warning about unused parameter */
+  (void)count;
 
   c->attr_mask = SP1_AMASK_INK;
   c->attr      = INK_BLUE;

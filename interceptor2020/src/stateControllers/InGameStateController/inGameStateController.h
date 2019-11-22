@@ -1,4 +1,5 @@
 #include "interceptorController.h"
+#include "spaceMinesController.h"
 
 struct InGameStateControllerStruct {
     bool isStarted;
@@ -6,6 +7,7 @@ struct InGameStateControllerStruct {
     StateController *stateController;
     StateController *gameOverStateController;
     InterceptorController *interceptorController;
+    SpaceMinesController *spaceMinesController;
 };
 typedef struct InGameStateControllerStruct InGameStateController;
 
@@ -32,13 +34,22 @@ void InGameStateController_initializeControllers(InGameStateController *inGameSt
     InterceptorController *interceptorController = new(InterceptorController);
     InterceptorController_initialize(interceptorController, renderer);
     inGameStateController->interceptorController = interceptorController;
+    
+    SpaceMinesController *spaceMinesController = new(SpaceMinesController);
+    SpaceMinesController_initialize(spaceMinesController, renderer);
+    inGameStateController->spaceMinesController = spaceMinesController;
 }
 
 void InGameStateController_deinitializeControllers(InGameStateController *inGameStateController) {
     inGameStateController->isStarted = false;
     
-    InterceptorController_deinitialize(inGameStateController->interceptorController);
+    Renderer *renderer = inGameStateController->renderer;    
+    
+    InterceptorController_deinitialize(inGameStateController->interceptorController, renderer);
     delete(inGameStateController->interceptorController);
+    
+    SpaceMinesController_deinitialize(inGameStateController->spaceMinesController, renderer);
+    delete(inGameStateController->spaceMinesController);
 }
 
 void InGameStateController_initializeControllersIfNeeded(InGameStateController *inGameStateController) {
@@ -61,10 +72,13 @@ void InGameStateController_step(InGameStateController *inGameStateController) {
     InGameStateController_initializeControllersIfNeeded(inGameStateController);
     
     InterceptorController_step(inGameStateController->interceptorController);
+    SpaceMinesController_step(inGameStateController->spaceMinesController);
     
     Renderer *renderer = inGameStateController->renderer;
     Renderer_renderGameObjects(renderer);
     Renderer_updateScreen(renderer); 
     
-    //InGameStateController_showGameOver(inGameStateController);
+#ifdef INTERCEPTOR2020_STRESS_TEST
+    InGameStateController_showGameOver(inGameStateController);
+#endif
 }
