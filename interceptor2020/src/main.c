@@ -22,10 +22,10 @@ int main()
     InGameStateController_initialize(inGameStateController);
   
     TitleScreenStateController *titleScreenStateController = new(TitleScreenStateController);
-    TitleScreenStateController_initiailize(titleScreenStateController, inGameStateController->stateController);
+    TitleScreenStateController_initiailize(titleScreenStateController, inGameStateController->stateController, renderer);
     
     GameOverStateController *gameOverStateController = new(GameOverStateController);
-    GameOverStateController_initiailize(gameOverStateController, inGameStateController->stateController);
+    GameOverStateController_initiailize(gameOverStateController, inGameStateController->stateController, renderer);
     inGameStateController->gameOverStateController = gameOverStateController->stateController;
     
     StateMachine *stateMachine = new(StateMachine);

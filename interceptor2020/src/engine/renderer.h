@@ -3,7 +3,6 @@
 struct RendererStruct {
     unsigned char objectsCount;    
     GameObject *objects[RENDERER_MAX_OBJECTS];
-  struct sp1_Rect full_screen;
 };
 typedef struct RendererStruct Renderer;
 
@@ -31,13 +30,12 @@ void Renderer_addObject(Renderer *renderer, GameObject *gameObject) {
 }
 
 void Renderer_render(Renderer *renderer) {
-    struct sp1_Rect *full_screen = renderer->full_screen;
     for (unsigned char i = 0; i < renderer->objectsCount; i++) {
         GameObject *gameObject = renderer->objects[i];
-        sp1_MoveSprPix(gameObject->gameObjectSprite, full_screen, bubble_col1, gameObject->x, gameObject->y);
+        sp1_MoveSprPix(gameObject->gameObjectSprite, Renderer_fullScreenRect, bubble_col1, gameObject->x, gameObject->y);
     }
 }
 
-void Renderer_clearScreen() {
+void Renderer_clearScreen(Renderer *renderer) {
     sp1_ClearRectInv(Renderer_fullScreenRect, BRIGHT | INK_BLACK | PAPER_BLACK, 32, SP1_RFLAG_TILE | SP1_RFLAG_COLOUR);      
 }

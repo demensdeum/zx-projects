@@ -1,19 +1,19 @@
 struct TitleScreenStateControllerStruct {
     StateController *stateController;
+    Renderer *renderer;
 };
 typedef struct TitleScreenStateControllerStruct TitleScreenStateController;
 
 void TitleScreenStateController_stepUncasted(void *stateControllerSubclass);
 void TitleScreenStateController_step(TitleScreenStateController *titleScreenStateController);
 
-void TitleScreenStateController_initiailize(TitleScreenStateController *titleScreenStateController, StateController *nextStateController) {
-    
+void TitleScreenStateController_initiailize(TitleScreenStateController *titleScreenStateController, StateController *nextStateController, Renderer *renderer) {
   StateController *stateController = new(StateController);
   stateController->subclassInstance = titleScreenStateController;
   stateController->subclassStepFunction = &TitleScreenStateController_stepUncasted;
   stateController->nextStateController = nextStateController;
   titleScreenStateController->stateController = stateController;
-    
+  titleScreenStateController->renderer = renderer;
 }
 
 void TitleScreenStateController_stepUncasted(void *stateControllerSubclass) {
@@ -22,6 +22,8 @@ void TitleScreenStateController_stepUncasted(void *stateControllerSubclass) {
 }
 
 void TitleScreenStateController_step(TitleScreenStateController *titleScreenStateController) {
+    Renderer *renderer = titleScreenStateController->renderer;
+    
     unsigned char i;
     unsigned char *pt = interceptorLogo_tiles;
 
@@ -35,7 +37,7 @@ void TitleScreenStateController_step(TitleScreenStateController *titleScreenStat
    ps0.flags     = SP1_PSSFLAG_INVALIDATE;
    ps0.visit     = 0;
      
-   	Renderer_clearScreen();   
+   	Renderer_clearScreen(renderer);   
    
      sp1_SetPrintPos(&ps0, 0, 0);
      sp1_PrintString(&ps0, interceptorLogo_ptiles);
@@ -56,5 +58,5 @@ void TitleScreenStateController_step(TitleScreenStateController *titleScreenStat
     
     in_wait_key();
     
-   	Renderer_clearScreen();       
+   	Renderer_clearScreen(renderer);
 }
