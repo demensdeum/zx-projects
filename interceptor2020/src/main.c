@@ -19,7 +19,7 @@ int main()
     Renderer_initialize(renderer);
     
     InGameStateController *inGameStateController = new(InGameStateController);
-    InGameStateController_initialize(inGameStateController);
+    InGameStateController_initialize(inGameStateController, renderer);
   
     TitleScreenStateController *titleScreenStateController = new(TitleScreenStateController);
     TitleScreenStateController_initiailize(titleScreenStateController, inGameStateController->stateController, renderer);

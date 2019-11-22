@@ -1,19 +1,33 @@
 struct InGameStateControllerStruct {
-     StateController *stateController;
-     StateController *gameOverStateController;
+    bool isStarted;
+    Renderer *renderer;
+    StateController *stateController;
+    StateController *gameOverStateController;
 };
 typedef struct InGameStateControllerStruct InGameStateController;
 
 void InGameStateController_stepUncasted(void *stateControllerSubclass);
 void InGameStateController_step(InGameStateController *inGameStateController);
 
-void InGameStateController_initialize(InGameStateController *inGameStateController) {
+void InGameStateController_initialize(InGameStateController *inGameStateController, Renderer *renderer) {
   StateController *stateController = new(StateController);
   stateController->subclassInstance = inGameStateController;
   stateController->subclassStepFunction = &InGameStateController_stepUncasted;
   stateController->nextStateController = nullptr;
   inGameStateController->stateController = stateController;
   inGameStateController->gameOverStateController = nullptr;
+  inGameStateController->renderer = renderer;
+  inGameStateController->isStarted = false;
+}
+
+void InGameStateController_initializeControllers(InGameStateController *inGameStateController) {
+    beep();
+    inGameStateController->isStarted = true;    
+}
+
+void InGameStateController_deinitializeControllers(InGameStateController *inGameStateController) {
+    beep();
+    inGameStateController->isStarted = false;
 }
 
 void InGameStateController_stepUncasted(void *stateControllerSubclass) {
@@ -22,23 +36,16 @@ void InGameStateController_stepUncasted(void *stateControllerSubclass) {
 }
 
 void InGameStateController_step(InGameStateController *inGameStateController) {
-    unsigned char i;
-    unsigned char *pt = tessa_tiles;
-
-    for (i = 0; i < TESSA_TILES_LEN; i++, pt += 8) {
-        sp1_TileEntry(TESSA_TILES_BASE + i, pt);    
+    
+    if (inGameStateController->isStarted == false) {
+        InGameStateController_initializeControllers(inGameStateController);
     }
     
-     struct sp1_pss ps0;
-     
-   ps0.bounds    = &Renderer_fullScreenRect;
-   ps0.flags     = SP1_PSSFLAG_INVALIDATE;
-   ps0.visit     = 0;
-     
-     sp1_SetPrintPos(&ps0, 0, 0);
-     sp1_PrintString(&ps0, tessa_ptiles);
+    Renderer *renderer = inGameStateController->renderer;
+    Renderer_clearScreen(renderer);
     
-    sp1_UpdateNow();
+    Renderer_updateScreen(renderer);
     
     inGameStateController->stateController->nextStateController = inGameStateController->gameOverStateController;
+    InGameStateController_deinitializeControllers(inGameStateController);
 }
