@@ -64,5 +64,7 @@ void InGameStateController_step(InGameStateController *inGameStateController) {
     
     Renderer *renderer = inGameStateController->renderer;
     Renderer_renderGameObjects(renderer);
-    Renderer_updateScreen(renderer);    
+    Renderer_updateScreen(renderer); 
+    
+    InGameStateController_showGameOver(inGameStateController);
 }
