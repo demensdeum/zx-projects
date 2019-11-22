@@ -1,5 +1,3 @@
-#include "interceptor2020Logo.h"
-
 struct TitleScreenStateControllerStruct {
     StateController *stateController;
 };
@@ -25,21 +23,22 @@ void TitleScreenStateController_stepUncasted(void *stateControllerSubclass) {
 
 void TitleScreenStateController_step(TitleScreenStateController *titleScreenStateController) {
     unsigned char i;
-    unsigned char *pt = tiles;
+    unsigned char *pt = interceptorLogo_tiles;
 
-    for (i = 0; i < TILES_LEN; i++, pt += 8)
-        sp1_TileEntry(TILES_BASE + i, pt);    
-    
-    struct sp1_Rect br1 = {0,  0, 255, 192};
+    for (i = 0; i < INTERCEPTOR_LOGO_TILES_LEN; i++, pt += 8) {
+        sp1_TileEntry(INTERCEPTOR_LOGO_TILES_BASE + i, pt);    
+    }
     
      struct sp1_pss ps0;
      
-   ps0.bounds    = &br1;
+   ps0.bounds    = &full_screen;
    ps0.flags     = SP1_PSSFLAG_INVALIDATE;
    ps0.visit     = 0;
      
+   	Renderer_clearScreen();   
+   
      sp1_SetPrintPos(&ps0, 0, 0);
-     sp1_PrintString(&ps0, ptiles);
+     sp1_PrintString(&ps0, interceptorLogo_ptiles);
      
      sp1_SetPrintPos(&ps0, 13, 10);
      sp1_PrintString(&ps0, "\x14\x47Press Any Key");
@@ -56,4 +55,6 @@ void TitleScreenStateController_step(TitleScreenStateController *titleScreenStat
     sp1_UpdateNow();
     
     in_wait_key();
+    
+   	sp1_ClearRectInv(&full_screen, BRIGHT | INK_BLACK | PAPER_BLACK, 32, SP1_RFLAG_TILE | SP1_RFLAG_COLOUR);        
 }

@@ -27,3 +27,7 @@ void Renderer_render(Renderer *renderer) {
         sp1_MoveSprPix(gameObject->gameObjectSprite, full_screen, bubble_col1, gameObject->x, gameObject->y);
     }
 }
+
+void Renderer_clearScreen() {
+    sp1_ClearRectInv(&full_screen, BRIGHT | INK_BLACK | PAPER_BLACK, 32, SP1_RFLAG_TILE | SP1_RFLAG_COLOUR);      
+}
