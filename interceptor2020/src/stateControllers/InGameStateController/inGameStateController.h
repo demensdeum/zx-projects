@@ -57,6 +57,9 @@ void InGameStateController_deinitializeControllers(InGameStateController *inGame
     
     SpaceMinesController_deinitialize(inGameStateController->spaceMinesController, renderer);
     delete(inGameStateController->spaceMinesController);
+    
+    EnemyController_deinitialize(inGameStateController->enemyController, renderer);
+    delete(inGameStateController->enemyController);    
 }
 
 void InGameStateController_initializeControllersIfNeeded(InGameStateController *inGameStateController) {
