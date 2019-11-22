@@ -10,21 +10,22 @@ typedef struct InterceptorControllerStruct InterceptorController;
 void InterceptorController_initialize(InterceptorController *interceptorController, Renderer *renderer) {
     GameObject *interceptor = GameObjectFactory_static_makeGameObject(0, 0);
     GameObject *bullet = GameObjectFactory_static_makeGameObject(0, 0);
-    
     interceptorController->interceptor = interceptor;
     interceptorController->bullet = bullet;
+    
     interceptorController->renderer = renderer;
     interceptorController->isBulletShouldFly = false;
     
     GameObject_retain(interceptor);
     GameObject_retain(bullet);
     
-    Renderer_addGameObject(renderer, interceptorController->interceptor);
+    Renderer_addGameObject(renderer, interceptor);
     Renderer_addGameObject(renderer, interceptorController->bullet);
     GameObject_hide(bullet);
     
     InputController *inputController = new(InputController);
     InputController_initialize(inputController);
+    interceptorController->inputController = inputController;
 }
 
 void InterceptorController_deinitialize(InterceptorController *interceptorController) {

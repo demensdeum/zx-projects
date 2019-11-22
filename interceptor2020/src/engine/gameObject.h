@@ -19,10 +19,12 @@ void GameObject_retain(GameObject *gameObject) {
     gameObject->referenceCount++;
 }
 
-void GameObject_release(GameObject *gameObject) {    
+void GameObject_release(GameObject *gameObject) {
     gameObject->referenceCount--;
     
     if (gameObject->referenceCount < 1) {
+        sp1_MoveSprAbs(gameObject->gameObjectSprite, &Renderer_fullScreenRect, NULL, 0, 34, 0, 0);
+        sp1_DeleteSpr(gameObject->gameObjectSprite);
         delete(gameObject);
     }
 }

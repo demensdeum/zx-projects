@@ -1,59 +1,66 @@
-#define RENDERER_MAX_GAME_OBJECTS 32
+#define RENDERER_MAX_GAME_OBJECTS 16
 
-struct RendererStruct {
-    unsigned char gameObjectsCount;    
+struct RendererStruct {  
     GameObject *gameObjects[RENDERER_MAX_GAME_OBJECTS];
 };
 typedef struct RendererStruct Renderer;
 
+void Renderer_removeAllGameObjects(Renderer *renderer);
 struct sp1_Rect Renderer_fullScreenRect = {0, 0, 32, 24};
 
 void Renderer_initialize(Renderer *renderer) {
-    renderer->gameObjectsCount = 0;
-    
   zx_border(INK_BLACK);
   sp1_Initialize( SP1_IFLAG_MAKE_ROTTBL | SP1_IFLAG_OVERWRITE_TILES | SP1_IFLAG_OVERWRITE_DFILE,
                   INK_BLUE | PAPER_WHITE,
                   ' ' );
   sp1_Invalidate(&Renderer_fullScreenRect);
+  
+    for (unsigned char i = 0; i < RENDERER_MAX_GAME_OBJECTS; i++) {
+        renderer->gameObjects[i] = nullptr;
+    }
 }
 
 void Renderer_removeGameObject(Renderer *renderer, GameObject *gameObjectToRemove) {
-    for (unsigned char i = 0; i < renderer->gameObjectsCount; i++) {
+    for (unsigned char i = 0; i < RENDERER_MAX_GAME_OBJECTS; i++) {
         GameObject *gameObject = renderer->gameObjects[i];
         if (gameObject == gameObjectToRemove) {
             GameObject_release(gameObject);
-            renderer->gameObjectsCount--;
+            renderer->gameObjects[i] = nullptr;
         }
     }    
 }
 
 void Renderer_removeAllGameObjects(Renderer *renderer) {
-    for (unsigned char i = 0; i < renderer->gameObjectsCount; i++) {
+    for (unsigned char i = 0; i < RENDERER_MAX_GAME_OBJECTS; i++) {
         GameObject *gameObject = renderer->gameObjects[i];
-        GameObject_release(gameObject);
+        if (gameObject != nullptr) {
+            GameObject_release(gameObject);
+            renderer->gameObjects[i] = nullptr;
+        }
     }    
-    renderer->gameObjectsCount = 0;
 }
 
 void Renderer_deinitialize(Renderer *renderer) {
-
     Renderer_removeAllGameObjects(renderer);
 }
 
 void Renderer_addGameObject(Renderer *renderer, GameObject *gameObject) {
-    if (renderer->gameObjectsCount >= RENDERER_MAX_GAME_OBJECTS) {
-        return;
+    for (unsigned char i = 0; i < RENDERER_MAX_GAME_OBJECTS; i++) {
+        GameObject *slot = renderer->gameObjects[i];
+        if (slot == nullptr) {
+            renderer->gameObjects[i] = gameObject;
+            GameObject_retain(gameObject);
+            break;
+        }
     }
-    renderer->gameObjects[renderer->gameObjectsCount] = gameObject;
-    renderer->gameObjectsCount++;
-    
-    GameObject_retain(gameObject);
 }
 
 void Renderer_renderGameObjects(Renderer *renderer) {
-    for (unsigned char i = 0; i < renderer->gameObjectsCount; i++) {
+    for (unsigned char i = 0; i < RENDERER_MAX_GAME_OBJECTS; i++) {
         GameObject *gameObject = renderer->gameObjects[i];
+        if (gameObject == nullptr) {
+            return;
+        }
         sp1_MoveSprPix(gameObject->gameObjectSprite, Renderer_fullScreenRect, bubble_col1, gameObject->x, gameObject->y);
     }
 }

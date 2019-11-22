@@ -33,7 +33,7 @@ void GameOverStateController_step(GameOverStateController *gameOverStateControll
     Renderer_renderFullscreenImage(renderer, gameOverImage);
     Renderer_updateScreen(renderer);
     
-    in_wait_key();  
+    in_wait_key();
     
     delete(gameOverImage);
     Renderer_clearScreen(renderer);  
