@@ -1,4 +1,4 @@
-#include "tessa.h"
+#include "interceptor2020Logo.h"
 
 struct TitleScreenStateControllerStruct {
     StateController *stateController;
@@ -40,7 +40,19 @@ void TitleScreenStateController_step(TitleScreenStateController *titleScreenStat
      
      sp1_SetPrintPos(&ps0, 0, 0);
      sp1_PrintString(&ps0, ptiles);
-    
+     
+     sp1_SetPrintPos(&ps0, 13, 10);
+     sp1_PrintString(&ps0, "\x14\x47Press Any Key");
+
+     sp1_SetPrintPos(&ps0, 19, 4);
+     sp1_PrintString(&ps0, "\x14\x47 Created by Demens Deum");
+
+     sp1_SetPrintPos(&ps0, 20, 5);
+     sp1_PrintString(&ps0, "\x14\x47 demensdeum@gmail.com");     
+     
+     sp1_SetPrintPos(&ps0, 22, 0);
+     sp1_PrintString(&ps0, "\x14\x03 Yandex Retro Games Battle 2019");
+     
     sp1_UpdateNow();
     
     in_wait_key();
