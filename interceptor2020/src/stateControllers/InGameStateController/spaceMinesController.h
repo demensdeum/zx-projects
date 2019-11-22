@@ -1,4 +1,4 @@
- struct SpaceMinesControllerStruct {
+struct SpaceMinesControllerStruct {
      GameObject *spaceMineOne;
      GameObject *spaceMineTwo;    
      Renderer *renderer;

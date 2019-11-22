@@ -33,7 +33,7 @@ void GameOverStateController_step(GameOverStateController *gameOverStateControll
     Renderer_renderFullscreenImage(renderer, gameOverImage);
     Renderer_updateScreen(renderer);
     
-#ifndef INTERCEPTOR2020_STRESS_TEST
+#if INTERCEPTOR2020_STRESS_TEST == 0
     in_wait_key();
 #endif
     

@@ -1,5 +1,6 @@
 #include "interceptorController.h"
 #include "spaceMinesController.h"
+#include "enemyController.h"
 
 struct InGameStateControllerStruct {
     bool isStarted;
@@ -8,6 +9,7 @@ struct InGameStateControllerStruct {
     StateController *gameOverStateController;
     InterceptorController *interceptorController;
     SpaceMinesController *spaceMinesController;
+    EnemyController *enemyController;
 };
 typedef struct InGameStateControllerStruct InGameStateController;
 
@@ -38,6 +40,11 @@ void InGameStateController_initializeControllers(InGameStateController *inGameSt
     SpaceMinesController *spaceMinesController = new(SpaceMinesController);
     SpaceMinesController_initialize(spaceMinesController, renderer);
     inGameStateController->spaceMinesController = spaceMinesController;
+    
+    EnemyController *enemyController = new(EnemyController);
+    EnemyController_initialize(enemyController, renderer);
+    inGameStateController->enemyController = enemyController;
+    
 }
 
 void InGameStateController_deinitializeControllers(InGameStateController *inGameStateController) {
@@ -73,12 +80,13 @@ void InGameStateController_step(InGameStateController *inGameStateController) {
     
     InterceptorController_step(inGameStateController->interceptorController);
     SpaceMinesController_step(inGameStateController->spaceMinesController);
+    EnemyController_step(inGameStateController->enemyController);
     
     Renderer *renderer = inGameStateController->renderer;
     Renderer_renderGameObjects(renderer);
     Renderer_updateScreen(renderer); 
     
-#ifdef INTERCEPTOR2020_STRESS_TEST
+#if INTERCEPTOR2020_STRESS_TEST == 1
     InGameStateController_showGameOver(inGameStateController);
 #endif
 }
