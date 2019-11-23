@@ -19,13 +19,13 @@ void InputController_initialize(InputController *inputController) {
 
 void InputController_step(InputController *inputController) {
     InputController_reset(inputController);
-      if (in_key_pressed(IN_KEY_SCANCODE_w)) {
-          inputController->isUpButtonPressed = true;
-      }
-      else if (in_key_pressed(IN_KEY_SCANCODE_s)) {
-          inputController->isDownButtonPressed = true;
-      }
-      if (in_key_pressed(IN_KEY_SCANCODE_SPACE)) {
-          inputController->isFireButtonPressed = true;
-      }
+    if (in_key_pressed(IN_KEY_SCANCODE_w)) {
+        inputController->isUpButtonPressed = true;
+    }
+    else if (in_key_pressed(IN_KEY_SCANCODE_s)) {
+        inputController->isDownButtonPressed = true;
+    }
+    if (in_key_pressed(IN_KEY_SCANCODE_SPACE)) {
+        inputController->isFireButtonPressed = true;
+    }
 }

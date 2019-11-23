@@ -1,1 +1,1 @@
- #define delete(X) free(X)
+#define delete(X) free(X)

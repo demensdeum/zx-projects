@@ -14,12 +14,12 @@ void ScoreController_step(ScoreController *scoreController, unsigned int score) 
     if (previousScore == score) {
         return;
     }
-    
+
     char textBuffer[30];
     sprintf(textBuffer, "\x14\x46Money: %d", score);
-    
+
     Renderer *renderer = scoreController->renderer;
     Renderer_renderText(renderer, textBuffer, 0, 23);
-    
+
     scoreController->previousScore = score;
 }

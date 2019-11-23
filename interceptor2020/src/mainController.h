@@ -1,5 +1,5 @@
 struct MainControllerStruct {
-     GameOverStateController *gameOverStateController;
+    GameOverStateController *gameOverStateController;
 };
 typedef struct MainControllerStruct MainController;
 

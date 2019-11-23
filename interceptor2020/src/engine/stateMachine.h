@@ -1,6 +1,6 @@
- struct StateMachineStruct {
-     bool isRunning;     
-     StateController *stateController;
+struct StateMachineStruct {
+    bool isRunning;
+    StateController *stateController;
 };
 typedef struct StateMachineStruct StateMachine;
 
@@ -20,7 +20,7 @@ void StateMachine_step(StateMachine *stateMachine) {
         return;
     }
     StateController_step(stateController);
-    
+
     StateController *nextStateController = stateController->nextStateController;
     if (nextStateController != nullptr) {
         stateMachine->stateController = nextStateController;

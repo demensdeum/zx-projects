@@ -1,18 +1,18 @@
-typedef enum { 
-    EnemyCommandStay, 
+typedef enum {
+    EnemyCommandStay,
     EnemyCommandMoveUp,
     EnemyCommandMoveDown,
     EnemyCommandsCount
-} 
+}
 EnemyCommand;
 
 struct EnemyControllerStruct {
-     GameObject *enemy;
-     EnemyCommand enemyCommand;
-     GameObject *bullet;    
-     Renderer *renderer;
+    GameObject *enemy;
+    EnemyCommand enemyCommand;
+    GameObject *bullet;
+    Renderer *renderer;
 };
-typedef struct EnemyControllerStruct EnemyController; 
+typedef struct EnemyControllerStruct EnemyController;
 
 void EnemyController_initialize(EnemyController *enemyController, Renderer *renderer) {
     GameObject *enemy = GameObjectFactory_static_makeGameObject(0, 0);
@@ -21,22 +21,22 @@ void EnemyController_initialize(EnemyController *enemyController, Renderer *rend
     enemyController->enemyCommand = EnemyCommandStay;
     enemyController->bullet = bullet;
     enemyController->renderer = renderer;
-    
+
     GameObject_hide(enemy);
     GameObject_hide(bullet);
-    
+
     Renderer_addGameObject(renderer, enemy);
     Renderer_addGameObject(renderer, bullet);
 }
 
 void EnemyController_deinitialize(EnemyController *enemyController, Renderer *renderer) {
     Renderer *renderer = enemyController->renderer;
-    
+
     GameObject_release(enemyController->enemy);
     GameObject_release(enemyController->bullet);
-    
+
     Renderer_removeGameObject(renderer, enemyController->enemy);
-    Renderer_removeGameObject(renderer, enemyController->bullet);    
+    Renderer_removeGameObject(renderer, enemyController->bullet);
 }
 
 void EnemyController_putEnemyIfNeeded(EnemyController *enemyController) {
@@ -65,7 +65,7 @@ void EnemyController_changeCurrentEnemyCommand(EnemyController *enemyController)
 }
 
 void EnemyController_enemyStepIfNeeded(EnemyController *enemyController) {
-   GameObject *enemy = enemyController->enemy;
+    GameObject *enemy = enemyController->enemy;
     if (GameObject_isHidden(enemy)) {
         return;
     }
@@ -76,23 +76,23 @@ void EnemyController_enemyStepIfNeeded(EnemyController *enemyController) {
     if (random < 2000) {
         EnemyController_changeCurrentEnemyCommand(enemyController);
     }
-    
+
     EnemyCommand command = enemyController->enemyCommand;
     switch (command) {
-        case EnemyCommandStay:
-            break;
-        case EnemyCommandMoveUp:
-            if (enemy->y > 0) {
-                enemy->y--;
-            }
-            break;
-        case EnemyCommandMoveDown:
-            if (enemy->y < 160) {
-                enemy->y++;
-            }
-            break;
-        case EnemyCommandsCount:
-            break;
+    case EnemyCommandStay:
+        break;
+    case EnemyCommandMoveUp:
+        if (enemy->y > 0) {
+            enemy->y--;
+        }
+        break;
+    case EnemyCommandMoveDown:
+        if (enemy->y < 160) {
+            enemy->y++;
+        }
+        break;
+    case EnemyCommandsCount:
+        break;
     }
 }
 
@@ -116,4 +116,4 @@ void EnemyController_step(EnemyController *enemyController) {
     }
     EnemyController_enemyStepIfNeeded(enemyController);
     EnemyController_bulletFlyIfNeeded(enemyController);
-} 
+}
