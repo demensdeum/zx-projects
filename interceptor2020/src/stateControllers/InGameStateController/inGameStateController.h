@@ -7,26 +7,30 @@ struct InGameStateControllerStruct {
     bool isStarted;
     Renderer *renderer;
     StateController *stateController;
-    StateController *gameOverStateController;
     InterceptorController *interceptorController;
     SpaceMinesController *spaceMinesController;
     EnemyController *enemyController;
     ScoreController *scoreController;
+    unsigned int score;
+    void *delegate;
+    void (*inGameStateControllerDidFinishWithScoreFunction)(void *, void *, unsigned int);
 };
 typedef struct InGameStateControllerStruct InGameStateController;
 
 void InGameStateController_stepUncasted(void *stateControllerSubclass);
 void InGameStateController_step(InGameStateController *inGameStateController);
 
-void InGameStateController_initialize(InGameStateController *inGameStateController, Renderer *renderer) {
+void InGameStateController_initialize(InGameStateController *inGameStateController, Renderer *renderer, void *delegate, void (*inGameStateControllerDidFinishWithScoreFunction)(void *, void *, unsigned int)) {
   StateController *stateController = new(StateController);
   stateController->subclassInstance = inGameStateController;
   stateController->subclassStepFunction = &InGameStateController_stepUncasted;
   stateController->nextStateController = nullptr;
   inGameStateController->stateController = stateController;
-  inGameStateController->gameOverStateController = nullptr;
   inGameStateController->renderer = renderer;
   inGameStateController->isStarted = false;
+  inGameStateController->score = 0;
+  inGameStateController->delegate = delegate;
+  inGameStateController->inGameStateControllerDidFinishWithScoreFunction = inGameStateControllerDidFinishWithScoreFunction;
 }
 
 void InGameStateController_initializeControllers(InGameStateController *inGameStateController) {
@@ -76,7 +80,7 @@ void InGameStateController_initializeControllersIfNeeded(InGameStateController *
 }
 
 void InGameStateController_showGameOver(InGameStateController *inGameStateController) {
-    inGameStateController->stateController->nextStateController = inGameStateController->gameOverStateController;
+    inGameStateController->inGameStateControllerDidFinishWithScoreFunction(inGameStateController->delegate, inGameStateController, inGameStateController->score);
     InGameStateController_deinitializeControllers(inGameStateController);    
 }
 
@@ -94,7 +98,7 @@ void InGameStateController_step(InGameStateController *inGameStateController) {
     
     Renderer *renderer = inGameStateController->renderer;
     Renderer_renderGameObjects(renderer);
-    ScoreController_step(inGameStateController->scoreController);
+    ScoreController_step(inGameStateController->scoreController, inGameStateController->score);
 
     Renderer_updateScreen(renderer); 
     
