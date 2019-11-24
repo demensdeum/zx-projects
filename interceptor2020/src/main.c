@@ -40,6 +40,8 @@ int main()
 
     MainController_initialize(mainController, gameOverStateController);
 
+    int steps = 0;
+    
     while (stateMachine->isRunning) {
         StateMachine_step(stateMachine);
     }

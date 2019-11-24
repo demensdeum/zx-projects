@@ -132,12 +132,14 @@ void ColliderController_step(ColliderController *colliderController) {
     bool isMineTwoCollidesWithInterceptorBullet = GameObject_isHidden(mineTwo) == false && GameObject_isHidden(interceptorBullet) == false && ColliderController_isCollides(colliderController, colliderController->interceptor, mineTwo);
     
     if (isMineOneCollidesWithInterceptorBullet) {
+        beep();
         colliderController->colliderControllerMineCollidesWithInterceptorBullet(colliderController->delegate, 
                                                                           colliderController, 
                                                                           mineOne, 
                                                                           colliderController->interceptorBullet);
     }
     else if (isMineTwoCollidesWithInterceptorBullet) {
+        beep();
         colliderController->colliderControllerMineCollidesWithInterceptorBullet(colliderController->delegate, 
                                                                           colliderController, 
                                                                           mineTwo, 

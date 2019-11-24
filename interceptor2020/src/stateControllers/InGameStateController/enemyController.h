@@ -45,7 +45,7 @@ void EnemyController_putEnemyIfNeeded(EnemyController *enemyController) {
         return;
     }
     enemy->x = 240;
-    enemy->y = randomUnsignedChar();
+    enemy->y = randomUnsignedCharMaximal(130);
 }
 
 void EnemyController_fireBulletIfNeeded(EnemyController *enemyController) {
@@ -110,8 +110,7 @@ void EnemyController_bulletFlyIfNeeded(EnemyController *enemyController) {
 }
 
 void EnemyController_step(EnemyController *enemyController) {
-    int random = rand();
-    if (random < 1000) {
+    if (GameObject_isHidden(enemyController->enemy) == true && rand() < 200) {
         EnemyController_putEnemyIfNeeded(enemyController);
     }
     EnemyController_enemyStepIfNeeded(enemyController);
