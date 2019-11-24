@@ -2,6 +2,7 @@
 #include "spaceMinesController.h"
 #include "enemyController.h"
 #include "scoreController.h"
+#include "colliderController.h"
 
 struct InGameStateControllerStruct {
     bool isStarted;
@@ -11,6 +12,7 @@ struct InGameStateControllerStruct {
     SpaceMinesController *spaceMinesController;
     EnemyController *enemyController;
     ScoreController *scoreController;
+    ColliderController *colliderController;
     unsigned int score;
     void *delegate;
     void (*inGameStateControllerDidFinishWithScoreFunction)(void *, void *, unsigned int);
@@ -19,6 +21,30 @@ typedef struct InGameStateControllerStruct InGameStateController;
 
 void InGameStateController_stepUncasted(void *stateControllerSubclass);
 void InGameStateController_step(InGameStateController *inGameStateController);
+void InGameStateController_colliderControllerMineCollidesWithInterceptor(
+    InGameStateController *inGameStateController, 
+    ColliderController *colliderController, 
+    GameObject *mine, 
+    GameObject *interceptor
+);
+void InGameStateController_colliderControllerEnemyBulletCollidesWithInterceptor(
+    InGameStateController *inGameStateController, 
+    ColliderController *colliderController, 
+    GameObject *enemyBullet, 
+    GameObject *interceptor
+);
+void InGameStateController_colliderControllerInterceptorBulletCollidesWithEnemy(
+    InGameStateController *inGameStateController, 
+    ColliderController *colliderController, 
+    GameObject *enemyBullet, 
+    GameObject *interceptor
+);
+void InGameStateController_colliderControllerMineCollidesWithInterceptorBullet(
+    InGameStateController *inGameStateController, 
+    ColliderController *colliderController, 
+    GameObject *mine, 
+    GameObject *interceptorBullet
+);
 
 void InGameStateController_initialize(InGameStateController *inGameStateController, Renderer *renderer, void *delegate, void (*inGameStateControllerDidFinishWithScoreFunction)(void *, void *, unsigned int)) {
     StateController *stateController = new(StateController);
@@ -54,6 +80,22 @@ void InGameStateController_initializeControllers(InGameStateController *inGameSt
     ScoreController *scoreController = new(ScoreController);
     ScoreController_initialize(scoreController, renderer);
     inGameStateController->scoreController = scoreController;
+    
+    ColliderController *colliderController = new(ColliderController);
+    ColliderController_initialize(colliderController, 
+                                  interceptorController->interceptor, 
+                                  spaceMinesController->spaceMineOne, 
+                                  spaceMinesController->spaceMineTwo,
+                                  enemyController->bullet,
+                                  interceptorController->bullet,
+                                  enemyController->enemy,
+                                  inGameStateController,
+                                  &InGameStateController_colliderControllerMineCollidesWithInterceptor,
+                                  &InGameStateController_colliderControllerEnemyBulletCollidesWithInterceptor,
+                                  &InGameStateController_colliderControllerInterceptorBulletCollidesWithEnemy,
+                                  &InGameStateController_colliderControllerMineCollidesWithInterceptorBullet
+                                 );
+    inGameStateController->colliderController = colliderController;
 }
 
 void InGameStateController_deinitializeControllers(InGameStateController *inGameStateController) {
@@ -71,6 +113,9 @@ void InGameStateController_deinitializeControllers(InGameStateController *inGame
     delete(inGameStateController->enemyController);
 
     delete(inGameStateController->scoreController);
+    
+    ColliderController_deinitialize(inGameStateController->colliderController);
+    delete(inGameStateController->colliderController);
 }
 
 void InGameStateController_initializeControllersIfNeeded(InGameStateController *inGameStateController) {
@@ -100,9 +145,51 @@ void InGameStateController_step(InGameStateController *inGameStateController) {
     Renderer_renderGameObjects(renderer);
     ScoreController_step(inGameStateController->scoreController, inGameStateController->score);
 
+    ColliderController_step(inGameStateController->colliderController);
+    
     Renderer_updateScreen(renderer);
 
 #if INTERCEPTOR2020_STRESS_TEST == 1
     InGameStateController_showGameOver(inGameStateController);
 #endif
+}
+
+void InGameStateController_colliderControllerMineCollidesWithInterceptor(
+    InGameStateController *inGameStateController, 
+    ColliderController *colliderController, 
+    GameObject *mine, 
+    GameObject *interceptor
+) 
+{
+    beep();
+}
+
+void InGameStateController_colliderControllerEnemyBulletCollidesWithInterceptor(
+    InGameStateController *inGameStateController, 
+    ColliderController *colliderController, 
+    GameObject *enemyBullet, 
+    GameObject *interceptor
+) 
+{
+    beep();
+}
+
+void InGameStateController_colliderControllerInterceptorBulletCollidesWithEnemy(
+    InGameStateController *inGameStateController, 
+    ColliderController *colliderController, 
+    GameObject *enemyBullet, 
+    GameObject *interceptor
+) 
+{
+    beep();
+}
+
+void InGameStateController_colliderControllerMineCollidesWithInterceptorBullet(
+    InGameStateController *inGameStateController, 
+    ColliderController *colliderController, 
+    GameObject *mine, 
+    GameObject *interceptorBullet
+) 
+{
+    beep();
 }
