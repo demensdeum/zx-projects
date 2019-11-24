@@ -1,7 +1,7 @@
 #include "interceptorController.h"
 #include "spaceMinesController.h"
 #include "enemyController.h"
-#include "scoreController.h"
+#include "uiController.h"
 #include "colliderController.h"
 
 struct InGameStateControllerStruct {
@@ -11,9 +11,10 @@ struct InGameStateControllerStruct {
     InterceptorController *interceptorController;
     SpaceMinesController *spaceMinesController;
     EnemyController *enemyController;
-    ScoreController *scoreController;
+    UIController *uiController;
     ColliderController *colliderController;
     unsigned int score;
+    char shipHealth;
     void *delegate;
     void (*inGameStateControllerDidFinishWithScoreFunction)(void *, void *, unsigned int);
 };
@@ -55,6 +56,7 @@ void InGameStateController_initialize(InGameStateController *inGameStateControll
     inGameStateController->renderer = renderer;
     inGameStateController->isStarted = false;
     inGameStateController->score = 0;
+    inGameStateController->shipHealth = 0;
     inGameStateController->delegate = delegate;
     inGameStateController->inGameStateControllerDidFinishWithScoreFunction = inGameStateControllerDidFinishWithScoreFunction;
 }
@@ -77,9 +79,9 @@ void InGameStateController_initializeControllers(InGameStateController *inGameSt
     EnemyController_initialize(enemyController, renderer);
     inGameStateController->enemyController = enemyController;
 
-    ScoreController *scoreController = new(ScoreController);
-    ScoreController_initialize(scoreController, renderer);
-    inGameStateController->scoreController = scoreController;
+    UIController *uiController = new(UIController);
+    UIController_initialize(uiController, renderer);
+    inGameStateController->uiController = uiController;
     
     ColliderController *colliderController = new(ColliderController);
     ColliderController_initialize(colliderController, 
@@ -96,6 +98,11 @@ void InGameStateController_initializeControllers(InGameStateController *inGameSt
                                   &InGameStateController_colliderControllerMineCollidesWithInterceptorBullet
                                  );
     inGameStateController->colliderController = colliderController;
+    
+    inGameStateController->score = 0;
+    inGameStateController->shipHealth = 100;
+    
+    inGameStateController->stateController->nextStateController = nullptr;
 }
 
 void InGameStateController_deinitializeControllers(InGameStateController *inGameStateController) {
@@ -112,7 +119,7 @@ void InGameStateController_deinitializeControllers(InGameStateController *inGame
     EnemyController_deinitialize(inGameStateController->enemyController, renderer);
     delete(inGameStateController->enemyController);
 
-    delete(inGameStateController->scoreController);
+    delete(inGameStateController->uiController);
     
     ColliderController_deinitialize(inGameStateController->colliderController);
     delete(inGameStateController->colliderController);
@@ -143,7 +150,7 @@ void InGameStateController_step(InGameStateController *inGameStateController) {
 
     Renderer *renderer = inGameStateController->renderer;
     Renderer_renderGameObjects(renderer);
-    ScoreController_step(inGameStateController->scoreController, inGameStateController->score);
+    UIController_step(inGameStateController->uiController, inGameStateController->score, inGameStateController->shipHealth);
 
     ColliderController_step(inGameStateController->colliderController);
     
@@ -163,6 +170,10 @@ void InGameStateController_colliderControllerMineCollidesWithInterceptor(
 {
     beep();    
     GameObject_hide(mine);
+    inGameStateController->shipHealth -= 20;
+    if (inGameStateController->shipHealth <= 0) {
+        InGameStateController_showGameOver(inGameStateController);        
+    }
 }
 
 void InGameStateController_colliderControllerEnemyBulletCollidesWithInterceptor(
@@ -174,6 +185,10 @@ void InGameStateController_colliderControllerEnemyBulletCollidesWithInterceptor(
 {
     beep();    
     GameObject_hide(enemyBullet);
+    inGameStateController->shipHealth -= 10;
+    if (inGameStateController->shipHealth <= 0) {
+        InGameStateController_showGameOver(inGameStateController);        
+    }    
 }
 
 void InGameStateController_colliderControllerInterceptorBulletCollidesWithEnemy(
