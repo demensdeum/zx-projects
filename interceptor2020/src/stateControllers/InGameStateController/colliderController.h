@@ -128,18 +128,16 @@ void ColliderController_step(ColliderController *colliderController) {
                                                                                  enemy);
     }
     
-    bool isMineOneCollidesWithInterceptorBullet = GameObject_isHidden(mineOne) == false && GameObject_isHidden(interceptorBullet) == false && ColliderController_isCollides(colliderController, colliderController->interceptor, mineOne);
-    bool isMineTwoCollidesWithInterceptorBullet = GameObject_isHidden(mineTwo) == false && GameObject_isHidden(interceptorBullet) == false && ColliderController_isCollides(colliderController, colliderController->interceptor, mineTwo);
+    bool isMineOneCollidesWithInterceptorBullet = GameObject_isHidden(mineOne) == false && GameObject_isHidden(interceptorBullet) == false && ColliderController_isCollides(colliderController, interceptorBullet, mineOne);
+    bool isMineTwoCollidesWithInterceptorBullet = GameObject_isHidden(mineTwo) == false && GameObject_isHidden(interceptorBullet) == false && ColliderController_isCollides(colliderController, interceptorBullet, mineTwo);
     
     if (isMineOneCollidesWithInterceptorBullet) {
-        beep();
         colliderController->colliderControllerMineCollidesWithInterceptorBullet(colliderController->delegate, 
                                                                           colliderController, 
                                                                           mineOne, 
                                                                           colliderController->interceptorBullet);
     }
     else if (isMineTwoCollidesWithInterceptorBullet) {
-        beep();
         colliderController->colliderControllerMineCollidesWithInterceptorBullet(colliderController->delegate, 
                                                                           colliderController, 
                                                                           mineTwo, 

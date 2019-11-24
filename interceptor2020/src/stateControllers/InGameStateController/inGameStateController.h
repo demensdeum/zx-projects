@@ -161,6 +161,7 @@ void InGameStateController_colliderControllerMineCollidesWithInterceptor(
     GameObject *interceptor
 ) 
 {
+    beep();    
     GameObject_hide(mine);
 }
 
@@ -171,6 +172,7 @@ void InGameStateController_colliderControllerEnemyBulletCollidesWithInterceptor(
     GameObject *interceptor
 ) 
 {
+    beep();    
     GameObject_hide(enemyBullet);
 }
 
@@ -181,6 +183,7 @@ void InGameStateController_colliderControllerInterceptorBulletCollidesWithEnemy(
     GameObject *enemy
 ) 
 {
+    beep();    
     GameObject_hide(interceptorBullet);
     GameObject_hide(enemy);
     inGameStateController->score += 100;
