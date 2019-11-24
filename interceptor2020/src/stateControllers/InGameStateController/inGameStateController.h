@@ -141,6 +141,13 @@ void InGameStateController_stepUncasted(void *stateControllerSubclass) {
     InGameStateController_step(inGameStateController);
 }
 
+void InGameStateController_takeDamage(InGameStateController *inGameStateController, unsigned char damage) {
+   inGameStateController->shipHealth -= damage;
+    if (inGameStateController->shipHealth <= 0) {
+        InGameStateController_showGameOver(inGameStateController);        
+    }    
+}
+
 void InGameStateController_step(InGameStateController *inGameStateController) {
     InGameStateController_initializeControllersIfNeeded(inGameStateController);
 
@@ -157,7 +164,7 @@ void InGameStateController_step(InGameStateController *inGameStateController) {
     Renderer_updateScreen(renderer);
 
 #if INTERCEPTOR2020_STRESS_TEST == 1
-    InGameStateController_showGameOver(inGameStateController);
+    InGameStateController_takeDamage(inGameStateController, randomUnsignedCharMaximal(30));
 #endif
 }
 
@@ -170,10 +177,7 @@ void InGameStateController_colliderControllerMineCollidesWithInterceptor(
 {
     beep();    
     GameObject_hide(mine);
-    inGameStateController->shipHealth -= 20;
-    if (inGameStateController->shipHealth <= 0) {
-        InGameStateController_showGameOver(inGameStateController);        
-    }
+    InGameStateController_takeDamage(inGameStateController, 20);
 }
 
 void InGameStateController_colliderControllerEnemyBulletCollidesWithInterceptor(
@@ -185,10 +189,7 @@ void InGameStateController_colliderControllerEnemyBulletCollidesWithInterceptor(
 {
     beep();    
     GameObject_hide(enemyBullet);
-    inGameStateController->shipHealth -= 10;
-    if (inGameStateController->shipHealth <= 0) {
-        InGameStateController_showGameOver(inGameStateController);        
-    }    
+    InGameStateController_takeDamage(inGameStateController, 10);
 }
 
 void InGameStateController_colliderControllerInterceptorBulletCollidesWithEnemy(

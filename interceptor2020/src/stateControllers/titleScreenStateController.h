@@ -31,6 +31,11 @@ void TitleScreenStateController_step(TitleScreenStateController *titleScreenStat
 
     Renderer *renderer = titleScreenStateController->renderer;
     Renderer_renderFullscreenImage(renderer, titleImage);
+    
+#if INTERCEPTOR2020_STRESS_TEST == 1
+    Renderer_renderText(renderer, "\x14\x03Stress Test Mode", 0, 0);
+#endif    
+    
     Renderer_renderText(renderer, "\x14\x46Space Bounty Hunter", 7, 9);
     Renderer_renderText(renderer, "\x14\x47Press Any Key", 10, 13);
     Renderer_renderText(renderer, "\x14\x47 Created by Demens Deum", 4, 19);
