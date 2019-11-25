@@ -61,10 +61,7 @@ void Renderer_renderGameObjects(Renderer *renderer) {
         if (gameObject == nullptr) {
             return;
         }
-        /*if (GameObject_isHidden(gameObject) == true) {
-            return;
-        }*/
-        sp1_MoveSprPix(gameObject->gameObjectSprite, Renderer_fullScreenRect, bubble_col1, gameObject->x, gameObject->y);
+        sp1_MoveSprPix(gameObject->gameObjectSprite, Renderer_fullScreenRect, gameObject->sprite_col, gameObject->x, gameObject->y);
     }
 }
 

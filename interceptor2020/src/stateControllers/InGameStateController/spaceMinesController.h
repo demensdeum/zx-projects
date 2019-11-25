@@ -6,8 +6,8 @@ struct SpaceMinesControllerStruct {
 typedef struct SpaceMinesControllerStruct SpaceMinesController;
 
 void SpaceMinesController_initialize(SpaceMinesController *spaceMinesController, Renderer *renderer) {
-    GameObject *spaceMineOne = GameObjectFactory_static_makeGameObject(0, 0);
-    GameObject *spaceMineTwo = GameObjectFactory_static_makeGameObject(0, 0);
+    GameObject *spaceMineOne = GameObjectFactory_static_makeGameObject(0, 0, mine_col1, mine_col2);
+    GameObject *spaceMineTwo = GameObjectFactory_static_makeGameObject(0, 0, mine_col1, mine_col2);
     spaceMinesController->spaceMineOne = spaceMineOne;
     spaceMinesController->spaceMineTwo = spaceMineTwo;
     spaceMinesController->renderer = renderer;
