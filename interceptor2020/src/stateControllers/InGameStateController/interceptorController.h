@@ -7,8 +7,8 @@ struct InterceptorControllerStruct {
 typedef struct InterceptorControllerStruct InterceptorController;
 
 void InterceptorController_initialize(InterceptorController *interceptorController, Renderer *renderer) {
-    GameObject *interceptor = GameObjectFactory_static_makeGameObject(0, 0, bubble_col1, bubble_col2);
-    GameObject *bullet = GameObjectFactory_static_makeGameObject(0, 0, bubble_col1, bubble_col2);
+    GameObject *interceptor = GameObjectFactory_static_makeGameObject(0, 0, interceptor_col1, interceptor_col2);
+    GameObject *bullet = GameObjectFactory_static_makeGameObject(0, 0, bullet_col1, bullet_col2);
     interceptorController->interceptor = interceptor;
     interceptorController->bullet = bullet;
 

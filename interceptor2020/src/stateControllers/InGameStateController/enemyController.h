@@ -15,8 +15,8 @@ struct EnemyControllerStruct {
 typedef struct EnemyControllerStruct EnemyController;
 
 void EnemyController_initialize(EnemyController *enemyController, Renderer *renderer) {
-    GameObject *enemy = GameObjectFactory_static_makeGameObject(0, 0, bubble_col1, bubble_col2);
-    GameObject *bullet = GameObjectFactory_static_makeGameObject(0, 0, bubble_col1, bubble_col2);
+    GameObject *enemy = GameObjectFactory_static_makeGameObject(0, 0, enemy_col1, enemy_col2);
+    GameObject *bullet = GameObjectFactory_static_makeGameObject(0, 0, bullet_col1, bullet_col2);
     enemyController->enemy = enemy;
     enemyController->enemyCommand = EnemyCommandStay;
     enemyController->bullet = bullet;

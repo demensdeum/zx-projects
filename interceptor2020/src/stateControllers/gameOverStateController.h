@@ -36,7 +36,7 @@ void GameOverStateController_step(GameOverStateController *gameOverStateControll
     Renderer_renderText(renderer, "\x14\x47Press Any Key", 10, 16);
 
     char textBuffer[30];
-    sprintf(textBuffer, "\x14\x03Money: %d", gameOverStateController->score);
+    sprintf(textBuffer, "\x14\x03Money: %d$", gameOverStateController->score);
     Renderer_renderText(renderer, textBuffer, 0, 23);
 
     Renderer_updateScreen(renderer);

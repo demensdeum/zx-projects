@@ -37,6 +37,7 @@ void TitleScreenStateController_step(TitleScreenStateController *titleScreenStat
 #endif    
     
     Renderer_renderText(renderer, "\x14\x46Space Bounty Hunter", 7, 9);
+    Renderer_renderText(renderer, "\x14\x47 Controls: W, S, [Space]", 4, 15);
     Renderer_renderText(renderer, "\x14\x47Press Any Key", 10, 13);
     Renderer_renderText(renderer, "\x14\x47 Created by Demens Deum", 4, 19);
     Renderer_renderText(renderer, "\x14\x47 demensdeum@gmail.com", 5, 20);
