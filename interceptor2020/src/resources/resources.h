@@ -1,4 +1,5 @@
 #include "interceptor2020Logo.h"
+#include "inGameBackground.h"
 #include "gameOverImage.h"
 #include "sounds.h"
 

@@ -9,7 +9,7 @@
 
 #include <malloc.h>
 
-#define INTERCEPTOR2020_STRESS_TEST 0
+#define INTERCEPTOR2020_STRESS_TEST 1
 
 #include "debug/beep.h"
 #include "resources/resources.h"
