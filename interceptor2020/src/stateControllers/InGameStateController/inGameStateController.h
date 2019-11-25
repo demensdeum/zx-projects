@@ -67,6 +67,16 @@ void InGameStateController_initializeControllers(InGameStateController *inGameSt
     Renderer *renderer = inGameStateController->renderer;
     Renderer_clearScreen(renderer);
 
+    FullscreenImage *backgroundImage = new(FullscreenImage);
+    FullscreenImage_initialize(backgroundImage,
+                               INGAME_BACKGROUND_TILES_BASE,
+                               INGAME_BACKGROUND_TILES_LEN,
+                               inGameBackground_tiles,
+                               inGameBackground_ptiles);
+
+    Renderer_renderFullscreenImage(renderer, backgroundImage);  
+    delete(backgroundImage);    
+    
     InterceptorController *interceptorController = new(InterceptorController);
     InterceptorController_initialize(interceptorController, renderer);
     inGameStateController->interceptorController = interceptorController;
@@ -103,16 +113,6 @@ void InGameStateController_initializeControllers(InGameStateController *inGameSt
     inGameStateController->shipHealth = 100;
     
     inGameStateController->stateController->nextStateController = nullptr;
-    
-    /*FullscreenImage *backgroundImage = new(FullscreenImage);
-    FullscreenImage_initialize(backgroundImage,
-                               INGAME_BACKGROUND_TILES_BASE,
-                               INGAME_BACKGROUND_TILES_LEN,
-                               inGameBackground_tiles,
-                               inGameBackground_ptiles);
-
-    Renderer_renderFullscreenImage(renderer, backgroundImage);  
-    delete(backgroundImage);*/
 }
 
 void InGameStateController_deinitializeControllers(InGameStateController *inGameStateController) {
