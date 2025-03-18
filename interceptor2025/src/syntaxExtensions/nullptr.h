@@ -1,0 +1,1 @@
+#define nullptr 0
